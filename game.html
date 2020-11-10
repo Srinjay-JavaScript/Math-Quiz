@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta name="viewport" content="width=device-width, initial-scale=1">
+         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> 
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+         <link rel="stylesheet" href="style.css">
+        <title>Math Quiz | Just Math | Math Matters</title>
+        <link rel="shortcut icon" href="LOGO.jpg" type="x/image">
+        
+    </head>
+    <body>
+        <div class="player_container">
+        <h1 id="player1_turn" class="heading_playerName align-horizontal">Q.</h1><span></span><h1 style="font-family: century gothic; font-weight: bold; color: white; font-size: 30px; margin-top: 30px;" id="player_1_name_label" class="align-horizontal"></h1><span></span>
+            <h1 style="font-family: century gothic; font-weight: bold; color: white; font-size: 30px; margin-left: 10px; margin-top: 30px;" id="player_1_score_label" class="align-horizontal">0</h1><span></span>
+            <div>
+         <h1 id="player2_turn" class="heading_playerName align-horizontal">A.</h1><span></span><h1 style="font-family: century gothic; font-weight: bold; color: white; font-size: 30px; margin-top: 30px;" id="player_2_name_label" class="align-horizontal"></h1><span></span>
+            <h1 style="font-family: century gothic; font-weight: bold; color: white; font-size: 30px; margin-left: 10px; margin-top: 30px;" id="player_2_score_label" class="align-horizontal">0</h1>
+            </div>
+             <script>
+                 var array_operator = ["×", "÷", "+", "-"];
+                 p1_score = 0;
+                 p2_score = 0;
+                document.getElementById("player_1_name_label").innerHTML = localStorage.getItem("P1_name") + ": "; 
+                document.getElementById("player_2_name_label").innerHTML = localStorage.getItem("P2_name") + ": ";
+            </script>
+        </div>
+        <div class="game_container">
+        <center>
+             <h1 class="heading" style="margin-top: 10px;">MATH QUIZ</h1>
+
+             <div id="ans_container" class="ans_container" style="display:none;">
+                <h3 id="player_question" style="font-family: century gothic; font-weight: bold; color: black;"></h3>
+                <hr>
+                <h3 style="font-family: century gothic; font-weight: bold; color: black;" id="h1Span">Answer: </h3>
+                <span><input id="user_answer" type="number" placeholder="Enter answer: "></span>
+                <hr>
+                <button style="margin-bottom: 15px;" id="button_check" onclick="check()">check</button><span><i id="correct-sign" class="glyphicon glyphicon-ok-sign" style="margin-top: 10px;"></i></span>
+                <i id="wrong-sign" class="glyphicon glyphicon-remove-sign" style="margin-top: 10px;"></i>
+            </div>
+            <br>
+            <br>
+
+            <div id="que_container" class="que_container">
+             <label>Send the 1st number : <b style="font-family: century gothic; color: red;">Try to enter a number with more than 1 digit.</b></label>
+             <input type="number" placeholder="Enter a number: " id="num1_User">
+             <br>
+             <label>Send the 2nd number : <b style="font-family: century gothic; color: red;">Try to enter a number with more than 1 digit.</b></label>
+             <input type="number" placeholder="Enter a number: " id="num2_User">
+             <br>
+             <button id="send_btn" onclick="sendToUser()">Send</button>
+            </div>
+              <script>
+                 var reality_operator;
+                 function sendToUser(){
+                    var random_operator = Math.floor(Math.random()*3.5);
+                    reality_operator = array_operator[random_operator];
+                    var num1 = document.getElementById("num1_User").value;
+                    var num2 = document.getElementById("num2_User").value;
+                    var text_q = num1.concat(" ").concat(reality_operator).concat(" ").concat(num2);
+                    document.getElementById("player_question").innerHTML = text_q;
+                    document.getElementById("ans_container").style.display = "block";
+                    document.getElementById("wrong-sign").style.display = "none";
+                    document.getElementById("correct-sign").style.display = "none";
+                }
+                
+                function check(){
+                    var n1 = document.getElementById("num1_User").value;
+                    var n2 = document.getElementById("num2_User").value;
+                    var result;
+                    if (reality_operator == "+"){
+                        result = parseInt(n1) + parseInt(n2);
+                    } 
+                    else if (reality_operator == "-") {
+                        result = n1-n2;
+                    }
+                    else if (reality_operator == "×") {
+                        result = n1*n2;
+                    }
+                    else if (reality_operator == "÷") {
+                        result = n1/n2;
+                    }
+  
+                    var p1Turn = document.getElementById("player1_turn").innerHTML;
+                    if (document.getElementById("user_answer").value == result){
+                        console.log("Correct!");
+                        document.getElementById("correct-sign").style.display = "block";
+                        document.getElementById("wrong-sign").style.display = "none";
+                        if (p1Turn == "A." ){
+                            p1_score = p1_score + 1;
+                            document.getElementById("player_1_score_label").innerHTML = p1_score;
+                        }
+                        else{
+                            p2_score = p2_score + 1;
+                            document.getElementById("player_2_score_label").innerHTML = p2_score;
+                        }
+                        setTimeout(disappear, 2000);
+                    }
+                    else{
+                        console.log("Incorrect!");
+                        document.getElementById("wrong-sign").style.display = "block";
+                        document.getElementById("correct-sign").style.display = "none";
+                        setTimeout(disappear, 2000);
+    
+                    }
+                    if (p1Turn == "Q."){
+                        document.getElementById("player1_turn").innerHTML = "A.";
+                        document.getElementById("player2_turn").innerHTML = "Q.";
+                    }
+                    else{
+                        document.getElementById("player1_turn").innerHTML = "Q.";
+                        document.getElementById("player2_turn").innerHTML = "A.";
+                    }
+                    
+                    
+                }
+                function disappear(){
+                        document.getElementById("ans_container").style.display="none";
+                        }
+             </script>
+       
+             </center>
+     </div>
+     
+    </body>
+</html>
